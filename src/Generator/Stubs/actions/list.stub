@@ -3,7 +3,13 @@
 namespace App\Containers\{{section-name}}\{{container-name}}\Actions;
 
 use App\Containers\{{section-name}}\{{container-name}}\Tasks\List{{models}}Task;
-use App\Containers\{{section-name}}\{{container-name}}\UI\{{ui}}\Requests\List{{models}}Request;
+@if($ui === 'api' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\API\Requests\List{{models}}Request as List{{models}}ApiRequest;
+@endif
+
+@if($ui === 'web' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\WEB\Requests\List{{models}}Request as List{{models}}WebRequest;
+@endif
 use App\Ship\Parents\Actions\Action as ParentAction;
 
 final class {{class-name}} extends ParentAction
@@ -13,8 +19,20 @@ final class {{class-name}} extends ParentAction
     ) {
     }
 
-    public function run(List{{models}}Request $request): mixed
+    @if($ui === 'api')
+    public function run(List{{models}}ApiRequest $request): mixed
     {
         return $this->list{{models}}Task->run();
     }
+    @elseif($ui === 'web')
+    public function run(List{{models}}WebRequest $request): mixed
+    {
+        return $this->list{{models}}Task->run();
+    }
+    @else
+    public function run(List{{models}}ApiRequest|List{{models}}WebRequest $request): mixed
+    {
+        return $this->list{{models}}Task->run();
+    }
+    @endif
 }

@@ -4,7 +4,13 @@ namespace App\Containers\{{section-name}}\{{container-name}}\Actions;
 
 use App\Containers\{{section-name}}\{{container-name}}\Models\{{model}};
 use App\Containers\{{section-name}}\{{container-name}}\Tasks\Find{{model}}ByIdTask;
-use App\Containers\{{section-name}}\{{container-name}}\UI\{{ui}}\Requests\Find{{model}}ByIdRequest;
+@if($ui === 'api' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\API\Requests\Find{{model}}ByIdRequest as Find{{model}}ByIdApiRequest;
+@endif
+
+@if($ui === 'web' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\WEB\Requests\Find{{model}}ByIdRequest as Find{{model}}ByIdWebRequest;
+@endif
 use App\Ship\Parents\Actions\Action as ParentAction;
 
 final class {{class-name}} extends ParentAction
@@ -14,8 +20,20 @@ final class {{class-name}} extends ParentAction
     ) {
     }
 
-    public function run(Find{{model}}ByIdRequest $request): {{model}}
+    @if($ui === 'api')
+    public function run(Find{{model}}ByIdApiRequest $request): {{model}}
     {
         return $this->find{{model}}ByIdTask->run($request->id);
     }
+    @elseif($ui === 'web')
+    public function run(Find{{model}}ByIdWebRequest $request): {{model}}
+    {
+        return $this->find{{model}}ByIdTask->run($request->id);
+    }
+    @else
+    public function run(Find{{model}}ByIdApiRequest|Find{{model}}ByIdWebRequest $request): {{model}}
+    {
+        return $this->find{{model}}ByIdTask->run($request->id);
+    }
+    @endif
 }

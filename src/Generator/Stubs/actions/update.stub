@@ -4,7 +4,13 @@ namespace App\Containers\{{section-name}}\{{container-name}}\Actions;
 
 use App\Containers\{{section-name}}\{{container-name}}\Models\{{model}};
 use App\Containers\{{section-name}}\{{container-name}}\Tasks\Update{{model}}Task;
-use App\Containers\{{section-name}}\{{container-name}}\UI\{{ui}}\Requests\Update{{model}}Request;
+@if($ui === 'api' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\API\Requests\Update{{model}}Request as Update{{model}}ApiRequest;
+@endif
+
+@if($ui === 'web' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\WEB\Requests\Update{{model}}Request as Update{{model}}WebRequest;
+@endif
 use App\Ship\Parents\Actions\Action as ParentAction;
 
 final class {{class-name}} extends ParentAction
@@ -14,7 +20,8 @@ final class {{class-name}} extends ParentAction
     ) {
     }
 
-    public function run(Update{{model}}Request $request): {{model}}
+    @if($ui === 'api')
+    public function run(Update{{model}}ApiRequest $request): {{model}}
     {
         $data = $request->sanitize([
             // add your request data here
@@ -22,4 +29,23 @@ final class {{class-name}} extends ParentAction
 
         return $this->update{{model}}Task->run($data, $request->id);
     }
+    @elseif($ui === 'web')
+    public function run(Update{{model}}WebRequest $request): {{model}}
+    {
+        $data = $request->sanitize([
+            // add your request data here
+        ]);
+
+        return $this->update{{model}}Task->run($data, $request->id);
+    }
+    @else
+    public function run(Update{{model}}ApiRequest|Update{{model}}WebRequest $request): {{model}}
+    {
+        $data = $request->sanitize([
+            // add your request data here
+        ]);
+
+        return $this->update{{model}}Task->run($data, $request->id);
+    }
+    @endif
 }

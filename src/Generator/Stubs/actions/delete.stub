@@ -3,7 +3,13 @@
 namespace App\Containers\{{section-name}}\{{container-name}}\Actions;
 
 use App\Containers\{{section-name}}\{{container-name}}\Tasks\Delete{{model}}Task;
-use App\Containers\{{section-name}}\{{container-name}}\UI\{{ui}}\Requests\Delete{{model}}Request;
+@if($ui === 'api' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\API\Requests\Delete{{model}}Request as Delete{{model}}ApiRequest;
+@endif
+
+@if($ui === 'web' || $ui === 'both')
+use App\Containers\{{section-name}}\{{container-name}}\UI\WEB\Requests\Delete{{model}}Request as Delete{{model}}WebRequest;
+@endif
 use App\Ship\Parents\Actions\Action as ParentAction;
 
 final class {{class-name}} extends ParentAction
@@ -13,8 +19,20 @@ final class {{class-name}} extends ParentAction
     ) {
     }
 
-    public function run(Delete{{model}}Request $request): bool
+    @if($ui === 'api')
+    public function run(Delete{{model}}ApiRequest $request): bool
     {
         return $this->delete{{model}}Task->run($request->id);
     }
+    @elseif($ui === 'web')
+    public function run(Delete{{model}}WebRequest $request): bool
+    {
+        return $this->delete{{model}}Task->run($request->id);
+    }
+    @else
+    public function run(Delete{{model}}ApiRequest|Delete{{model}}WebRequest $request): bool
+    {
+        return $this->delete{{model}}Task->run($request->id);
+    }
+    @endif
 }

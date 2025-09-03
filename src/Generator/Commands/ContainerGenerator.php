@@ -116,6 +116,7 @@ final class ContainerGenerator extends Generator implements ComponentsGenerator
                 '--listeners' => $generateListeners,
                 '--tests' => $generateTests,
                 '--maincalled' => true,
+                '--ui'=> $ui
             ]);
         }
 
@@ -125,6 +126,8 @@ final class ContainerGenerator extends Generator implements ComponentsGenerator
                 '--container' => $containerName,
                 '--file' => 'composer',
                 '--maincalled' => true,
+                '--ui'=> $ui
+
             ]);
         }
 

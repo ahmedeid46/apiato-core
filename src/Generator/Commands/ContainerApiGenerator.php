@@ -23,6 +23,7 @@ final class ContainerApiGenerator extends Generator implements ComponentsGenerat
         ['listeners', null, InputOption::VALUE_OPTIONAL, 'Generate Event Listeners for Events of this Container?'],
         ['tests', null, InputOption::VALUE_OPTIONAL, 'Generate Tests for this Container?'],
         ['maincalled', false, InputOption::VALUE_NONE],
+        ['ui','api', InputOption::VALUE_OPTIONAL],
     ];
     /**
      * The console command name.
@@ -55,7 +56,7 @@ final class ContainerApiGenerator extends Generator implements ComponentsGenerat
 
     public function getUserInputs(): array|null
     {
-        $ui = 'api';
+        $ui = $this->option('ui') ?? 'api';
 
         $sectionName = $this->sectionName;
         $_sectionName = Str::lower($this->sectionName);

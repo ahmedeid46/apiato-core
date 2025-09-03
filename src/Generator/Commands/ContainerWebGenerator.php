@@ -18,6 +18,8 @@ final class ContainerWebGenerator extends Generator implements ComponentsGenerat
         ['url', null, InputOption::VALUE_OPTIONAL, 'The base URI of all endpoints (/stores, /cars, ...)'],
         ['controllertype', null, InputOption::VALUE_OPTIONAL, 'The controller type (SAC, MAC)'],
         ['maincalled', false, InputOption::VALUE_NONE],
+        ['ui','api', InputOption::VALUE_OPTIONAL],
+
     ];
     /**
      * The console command name.
@@ -50,7 +52,7 @@ final class ContainerWebGenerator extends Generator implements ComponentsGenerat
 
     public function getUserInputs(): array|null
     {
-        $ui = 'web';
+        $ui = $this->option('ui') ?? 'api';
 
         $sectionName = $this->sectionName;
         $_sectionName = Str::lower($this->sectionName);
